@@ -1,18 +1,24 @@
 package Blog.Service;
 
 import Blog.Model.Post;
+import Blog.repository.PostRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class PostService {
+
+    @Autowired
+    private PostRepository postRepository;
     public PostService(){
         System.out.println("***Post Service ***");
     }
-    public ArrayList<Post> getAllPosts() {
-        ArrayList<Post> posts = new ArrayList<>();
+    public List<Post> getAllPosts() {
+        /*ArrayList<Post> posts = new ArrayList<>();
 
         Post post1 = new Post();
         post1.setTitle("Post 1");
@@ -31,11 +37,12 @@ public class PostService {
 
         posts.add(post1);
         posts.add(post2);
-        posts.add(post3);
+        posts.add(post3);*/
 
-        return posts;
+
+        return postRepository.getAllPosts();
     }
-    public ArrayList<Post> getOnePost() {
+   /* public ArrayList<Post> getOnePost() {
         ArrayList<Post> posts = new ArrayList<>();
 
         Post post1 = new Post();
@@ -46,8 +53,23 @@ public class PostService {
 
         return posts;
 
-    }
+    }*/
 
     public void createPost(Post newPost) {
+        newPost.setDate(new Date());
+        postRepository.createPost(newPost);
+        System.out.println("New Post"+newPost);
+    }
+
+    public Post getPost(Integer postId) {
+        return postRepository.getPost(postId);
+    }
+
+    public void updatePost(Post updatedPost) {
+        updatedPost.setDate(new Date());
+        postRepository.updatePost(updatedPost);
+    }
+    public void deletePost(Integer postId) {
+        postRepository.deletePost(postId);
     }
 }

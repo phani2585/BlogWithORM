@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -44,7 +45,7 @@ public class UserController {
 
     @RequestMapping(value = "users/logout", method= RequestMethod.POST)
     public String logout(Model model){
-        ArrayList<Post> posts=postservice.getAllPosts();
+        List<Post> posts=postservice.getAllPosts();
 
         model.addAttribute("posts",posts);
 return "index";

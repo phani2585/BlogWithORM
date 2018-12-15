@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -19,7 +20,7 @@ public class HomeController {
     private PostService postservice;
     @RequestMapping("/")
     public String getAllPosts(Model model){
-             ArrayList<Post> posts=postservice.getAllPosts();
+             List<Post> posts=postservice.getAllPosts();
 
         model.addAttribute("posts",posts);
 
