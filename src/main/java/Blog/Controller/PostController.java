@@ -1,6 +1,8 @@
 package Blog.Controller;
 
+import Blog.Model.Category;
 import Blog.Model.Post;
+import Blog.Model.User;
 import Blog.Service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +28,26 @@ public class PostController {
     }
 
     @RequestMapping(value = "/posts/create", method = RequestMethod.POST)
-    public String createPost(Post newPost) {
+    public String createPost(Post newPost, HttpSession session) {
+        User user = (User) session.getAttribute("loggeduser");
+        newPost.setUser(user);
+
+        if (newPost.getSpringBlog() != null) {
+            Category springBlogCategory = new Category();
+            springBlogCategory.setCategory(newPost.getSpringBlog());
+            newPost.getCategories().add(springBlogCategory);
+        }
+
+        if (newPost.getJavaBlog() != null) {
+            Category javaBlogCategory = new Category();
+            javaBlogCategory.setCategory(newPost.getJavaBlog());
+            newPost.getCategories().add(javaBlogCategory);
+        }
+
         postService.createPost(newPost);
         return "redirect:/posts";
     }
+
     @RequestMapping("posts")
     public String getUserPosts(Model model) {
         List<Post> posts = postService.getAllPosts();
@@ -42,8 +61,11 @@ public class PostController {
         return "posts/edit";
     }
     @RequestMapping(value = "/editPost", method = RequestMethod.PUT)
-    public String editPostSubmit(@RequestParam(name="postId") Integer postId, Post updatedPost) {
+    public String editPostSubmit(@RequestParam(name="postId") Integer postId, Post updatedPost, HttpSession session) {
+
         updatedPost.setId(postId);
+        User user = (User)session.getAttribute("loggeduser");
+        updatedPost.setUser(user);
         postService.updatePost(updatedPost);
         return "redirect:/posts";
     }
